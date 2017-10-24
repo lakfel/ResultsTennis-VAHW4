@@ -149,7 +149,7 @@ div.tooltip {
 	<input type="button" value="Refresh" onclick="botonClick()">
 </div>
 <div id="vizcontainer">
-<svg style="width:800;height:800;border:1px lightgray solid;" />
+<svg style="width:1100;height:1100;border:1px lightgray solid;" />
 </div>
   <footer>
 <script>
@@ -355,19 +355,21 @@ div.tooltip {
       .selectAll("rect")
       .data(matrixC);
 	  
+	var px = Math.max(1, 1000/contador);
+	
 	  todos
-	  .attr("width", 5)
-      .attr("height", 5)
-      .attr("x", function (d, i) {return d.y * 5})
-      .attr("y", function (d, i) {return d.x * 5})
+	  .attr("width", px)
+      .attr("height", px)
+      .attr("x", function (d, i) {return d.y * px})
+      .attr("y", function (d, i) {return d.x * px})
       .style("fill-opacity", function (d) {return d.peso * .3});
 	  
       todos.enter()
       .append("rect")
-      .attr("width", 5)
-      .attr("height", 5)
-      .attr("x", function (d, i) {return d.y * 5})
-      .attr("y", function (d, i) {return d.x * 5})
+      .attr("width", px)
+      .attr("height", px)
+      .attr("x", function (d, i) {return d.y * px})
+      .attr("y", function (d, i) {return d.x * px})
       .style("stroke", "black")
       .style("stroke-width", "0px")
       .style("fill", "red")
@@ -388,7 +390,7 @@ div.tooltip {
 				div.transition()        
 					.duration(500)      
 					.style("opacity", 0); 
-				gridOver(d);
+				gridOver2(d);
 			});
       //.on("mouseover", gridOver)
       
@@ -397,11 +399,22 @@ div.tooltip {
 	  
 	  function gridOver(d) {
         d3.selectAll("rect").style("stroke-width", function (p) {return p.x == d.x || p.y == d.y ? "1px" : "0px"});
-      }
+       /* d3.selectAll("rect").attr("width", function (p) {return p.x == d.x || p.y == d.y ? 20 : 5})
+			  .attr("height", function (p) {return p.x == d.x || p.y == d.y ? 10 : 5})
+			  .attr("x", function (p) {return p.x <= d.x ? p.x*5 : p.x*5 + 5})
+			  .attr("y", function (p) {return p.y <= d.y ? p.y*5 : p.y*5 + 5});
+      */}
+	  function gridOver2(d) {
+        d3.selectAll("rect").style("stroke-width",  "0px");
+        /*d3.selectAll("rect").attr("width",  5)
+			  .attr("height",  5)
+			  .attr("x", function (p) {return  p.x*5 })
+			  .attr("y", function (p) {return  p.y*5 });
+      */}
 	  
 	  
 	  
-      var scaleSize = contador * 5;
+      var scaleSize = contador * px;
 	  
       var nameScale1 = d3.scale.ordinal().domain(jugadoresF).rangePoints([0,scaleSize],1);
       var nameScale2 = d3.scale.ordinal().domain(jugadoresC).rangePoints([0,scaleSize],1);
@@ -450,7 +463,7 @@ div.tooltip {
 		
 		var todos = d3.select("svg")
 		  .append("g")
-		  .attr("transform", "translate(100,50)")
+		  .attr("transform", "translate(100,100)")
 		  .attr("id", "adjacencyG");
 		
 		
