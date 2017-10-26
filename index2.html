@@ -1,0 +1,505 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>D3 in Action Adjacency Matrix</title>
+  <meta charset="utf-8" />
+</head>
+<!--script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<!--script src="http://d3js.org/queue.v1.min.js" type="text/javascript"></script-->
+
+<script src="colas.js" type="text/javascript"></script>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<style>
+.tick line {
+  shape-rendering: crispEdges;
+  stroke: #000;
+}
+
+line.minor  {
+  stroke: #777;
+  stroke-dasharray: 2,2;
+}
+
+path.domain {
+  fill: none;
+  stroke: black;
+}
+div.tooltip {   
+  position: absolute;           
+  text-align: center;           
+  width: 100px;                  
+  height: 100px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
+}
+</style>
+<body onload="adjacency()">
+<div id = "divAnho">
+	<label for="anho">Anho</label>
+	<select id="anho">
+		<option value = ""></option>
+		<option value = "2013">2013</option>
+		<option value = "2014">2014</option>
+		<option value = "2015">2015</option>
+		<option value = "2016">2016</option>
+		<option value = "2017">2017</option>
+	</select>
+</div>
+<div id  = "divTorneo">
+	<label for="torneo">torneo</label>
+	<select id = "torneo">
+		<option value = ""></option>
+		<option value = "Brisbane International">Brisbane International</option>
+		<option value = "Chennai Open">Chennai Open</option>
+		<option value = "Qatar Exxon Mobil Open">Qatar Exxon Mobil Open</option>
+		<option value = "ASB Classic">ASB Classic</option>
+		<option value = "Apia International">Apia International</option>
+		<option value = "Australian Open">Australian Open</option>
+		<option value = "Open Sud de France">Open Sud de France</option>
+		<option value = "Ecuador Open">Ecuador Open</option>
+		<option value = "Garanti Koza Sofia Open">Garanti Koza Sofia Open</option>
+		<option value = "Argentina Open">Argentina Open</option>
+		<option value = "Memphis Open">Memphis Open</option>
+		<option value = "ABN AMRO World Tennis Tournament">ABN AMRO World Tennis Tournament</option>
+		<option value = "Delray Beach Open">Delray Beach Open</option>
+		<option value = "Open 13">Open 13</option>
+		<option value = "Rio Open">Rio Open</option>
+		<option value = "Abierto Mexicano">Abierto Mexicano</option>
+		<option value = "Dubai Tennis Championships">Dubai Tennis Championships</option>
+		<option value = "Brasil Open">Brasil Open</option>
+		<option value = "BNP Paribas Open">BNP Paribas Open</option>
+		<option value = "Sony Ericsson Open">Sony Ericsson Open</option>
+		<option value = "U.S. Men's Clay Court Championships">U.S. Men's Clay Court Championships</option>
+		<option value = "Grand Prix Hassan II">Grand Prix Hassan II</option>
+		<option value = "Monte Carlo Masters">Monte Carlo Masters</option>
+		<option value = "Open Banco Sabadell ">Open Banco Sabadell </option>
+		<option value = "Gazprom Hungarian Open">Gazprom Hungarian Open</option>
+		<option value = "Millenium Estoril Open">Millenium Estoril Open</option>
+		<option value = "Istanbul Open">Istanbul Open</option>
+		<option value = "BMW Open">BMW Open</option>
+		<option value = "Mutua Madrid Open">Mutua Madrid Open</option>
+		<option value = "Internazionali BNL d'Italia">Internazionali BNL d'Italia</option>
+		<option value = "Geneva Open">Geneva Open</option>
+		<option value = "Lyon Open">Lyon Open</option>
+		<option value = "French Open">French Open</option>
+		<option value = "Ricoh Open">Ricoh Open</option>
+		<option value = "Mercedes Cup">Mercedes Cup</option>
+		<option value = "Gerry Weber Open">Gerry Weber Open</option>
+		<option value = "AEGON Championships">AEGON Championships</option>
+		<option value = "Antalya Open">Antalya Open</option>
+		<option value = "AEGON International">AEGON International</option>
+		<option value = "Wimbledon">Wimbledon</option>
+		<option value = "SkiStar Swedish Open">SkiStar Swedish Open</option>
+		<option value = "Hall of Fame Championships">Hall of Fame Championships</option>
+		<option value = "Croatia Open">Croatia Open</option>
+		<option value = "BB&T Atlanta Open">BB&T Atlanta Open</option>
+		<option value = "Suisse Open Gstaad">Suisse Open Gstaad</option>
+		<option value = "German Tennis Championships">German Tennis Championships</option>
+		<option value = "Generali Open">Generali Open</option>
+		<option value = "Abierto Mexicano Mifel">Abierto Mexicano Mifel</option>
+		<option value = "Citi Open">Citi Open</option>
+		<option value = "Rogers Masters">Rogers Masters</option>
+		<option value = "Western & Southern Financial Group Masters">Western & Southern Financial Group Masters</option>
+		<option value = "Winston-Salem Open at Wake Forest University">Winston-Salem Open at Wake Forest University</option>
+		<option value = "US Open">US Open</option>
+		<option value = "Open de Moselle">Open de Moselle</option>
+		<option value = "St. Petersburg Open">St. Petersburg Open</option>
+		<option value = "Chengdu Open">Chengdu Open</option>
+		<option value = "Shenzhen Open">Shenzhen Open</option>
+		<option value = "China Open">China Open</option>
+		<option value = "Rakuten Japan Open Tennis Championships">Rakuten Japan Open Tennis Championships</option>
+		<option value = "Shanghai Masters">Shanghai Masters</option>
+		<option value = "European Open">European Open</option>
+		<option value = "Kremlin Cup">Kremlin Cup</option>
+		<option value = "Stockholm Open">Stockholm Open</option>
+	</select>
+</div>
+
+<div id = "divSerie">
+	<label for="serie">serie</label>
+	<select id="serie">
+		<option value = ""></option>
+		<option value = "ATP250">ATP250</option>
+		<option value = "Grand Slam">Grand Slam</option>
+		<option value = "ATP500">ATP500</option>
+		<option value = "Masters 1000">Masters 1000</option>
+
+	</select>
+</div>
+<div id = "divTipo">
+	<label for="tipo">tipo</label>
+	<select id="tipo">
+		<option value = ""></option>
+		<option value = "Outdoor">Outdoor</option>
+		<option value = "Indoor">Indoor</option>
+	</select>
+</div>
+<div id = "divSuperficie">
+	<label for="superficie">superficie</label>
+	<select id="superficie">
+		<option value = ""></option>
+		<option value = "Hard">Hard</option>
+		<option value = "Clay">Clay</option>
+		<option value = "Grass">Grass</option>
+	</select>
+</div>
+<div id = "divRonda">
+	<label for="ronda">ronda</label>
+	<select id="ronda">
+		<option value = ""></option>
+		<option value = "1st Round">1st Round</option>
+		<option value = "2nd Round">2nd Round</option>
+		<option value = "3rd Round">3rd Round</option>
+		<option value = "4th Round">4th Round</option>
+		<option value = "Quarterfinals">Quarterfinals</option>
+		<option value = "Semifinals">Semifinals</option>
+		<option value = "The Final">The Final</option>
+	</select>
+</div>
+<div id = "divButton">
+	<input type="button" value="Refresh" onclick="botonClick()">
+</div>
+<div id="vizcontainer">
+<svg style="width:1100;height:1100;border:1px lightgray solid;" />
+</div>
+  <footer>
+<script>
+  
+  var matrix=[];
+  var datosT=[];
+  var jugadoresF=[];
+  var jugadoresC=[];
+  var matrixC=[];
+  var contador;
+  
+  var div = d3.select("body").append("div")   
+			.attr("class", "tooltip")               
+			.style("opacity", 0);
+  function calculo(anho, torneo, serie, tipo, superficie, ronda, datos)
+  {
+	console.log("Entra al calculo");
+	 var jugs={};
+	 var jugsCols={};
+	 var edges= {};
+	 var encuentra1, encuentra2;
+	 contador = -1;
+	 for(d in datos)
+	 {	
+		encuentra1 = false;
+		encuentra2 = false;
+		if((torneo == "" || datos[d].tournament == torneo) && 
+			(serie == "" || datos[d].series == serie) && 
+			(tipo == "" || datos[d].court == tipo) && 
+			(superficie == "" || datos[d].surface == superficie) &&
+			(ronda == "" || datos[d].round == ronda)  &&
+			(ronda == "" || datos[d].anho == anho)					
+			)
+		{
+			var id = datos[d].winner + ":::" + datos[d].loser;
+			if(edges[id])
+			{
+				edges[id].peso = edges[id].peso + 1;
+			}
+			else
+			{
+				edges[id] = {peso:1};
+			}
+			
+
+			
+			if(!jugs[datos[d].winner])
+			{
+				contador++;
+				jugs[datos[d].winner] = {id:contador, nombre:datos[d].winner, wins:1, loses:0};
+				jugsCols[datos[d].winner] = {id:contador, nombre:datos[d].winner, wins:1, loses:0};
+			}
+			else
+			{
+				jugs[datos[d].winner].wins = jugs[datos[d].winner].wins +1;
+				jugsCols[datos[d].winner].wins = jugsCols[datos[d].winner].wins +1;
+			}
+			if(!jugs[datos[d].loser])
+			{
+				contador++;
+				jugs[datos[d].loser]= {id:contador, nombre:datos[d].loser, wins:0, loses:1};
+				jugsCols[datos[d].loser] = {id:contador, nombre:datos[d].loser, wins:0, loses:1};
+			}
+			else
+			{
+				jugs[datos[d].loser].loses = jugs[datos[d].loser].loses +1;
+				jugsCols[datos[d].loser].loses = jugsCols[datos[d].loser].loses +1;
+			}
+		}
+	 }
+	contador++;
+	var result = []
+	for(var i = 0; i < contador ;  i++)
+	{
+		result.push(new Array(contador).fill(0))
+	}
+	
+	var sumaFilas =new Array(contador).fill(0);
+	var sumaColumnas =new Array(contador).fill(0);	
+	
+	
+	for(i in edges)
+	{
+		try
+		{
+			var nom1 = i.split(":::")[0];
+			var nom2 = i.split(":::")[1];
+			var n1 = jugs[nom1];
+			var n2 = jugs[nom2];
+			result[n1.id][n2.id] = edges[i].peso;
+			sumaFilas[n1.id]=sumaFilas[n1.id] + edges[i].peso;
+			sumaColumnas[n2.id]=sumaColumnas[n2.id] + edges[i].peso;
+		}
+		catch(err)
+		{
+			console.log(err.message);
+		}
+	}
+	var jgsF = [];
+	var jgsC = [];
+
+	for (x in jugs)
+	{
+		jgsF.push(x);
+	}
+	
+	for (x in jugsCols)
+	{
+		jgsC.push(x);
+	}
+	
+	for(i = 0; i < contador; i++)
+	{	
+		var max = sumaFilas[i];
+		var imax = i;
+		for(j = i+1; j < contador; j++)
+		{	 
+			if(max < sumaFilas[j])
+			{
+				imax = j ;
+				max = sumaFilas[j];
+			}
+		}
+		if(i != imax)
+		{
+			var tempo;
+			tempo = jgsF[i];
+			jgsF[i] = jgsF[imax];
+			jgsF[imax]  = tempo;
+			var sumaFF = sumaFilas[i];
+			sumaFilas[i] = sumaFilas[imax];
+			sumaFilas[imax]= sumaFF;
+			
+			for(j = 0; j < contador; j++)
+			{	 
+				var tem = result[i][j];
+				result[i][j] = result[imax][j];
+				result[imax][j] = tem;
+			}
+		}
+	}
+	
+	for(i = 0; i < contador; i++)
+	{	
+		var max = sumaColumnas[i];
+		var imax = i;
+		for(j = i +1; j < contador; j++)
+		{	 
+			if(max < sumaColumnas[j])
+			{
+				imax = j ;
+				max = sumaColumnas[j];
+			}
+		}
+		if(i!=imax)
+		{
+			var tempo;
+			tempo = jgsC[i];
+			jgsC[i] = jgsC[imax];
+			jgsC[imax]  = tempo;
+			
+			var sumaFF = sumaColumnas[i];
+			sumaColumnas[i] = sumaColumnas[imax];
+			sumaColumnas[imax]= sumaFF;
+			
+			for(j = 0; j < contador; j++)
+			{	 
+				var tem = result[j][i];
+				result[j][i] = result[j][imax];
+				result[j][imax] = tem;
+			}
+		}
+	}
+	jugadoresF = jgsF;
+	jugadoresC  = jgsC;
+	matrix = result;
+	
+	var ult = [];
+	
+	for(i = 0; i < contador; i++)
+	{	
+		for(j = 0; j < contador; j++)
+		{
+			ult.push({x: i, y: j, peso: result[i][j], winner: jugadoresF[i], loser: jugadoresC[j]});
+		}
+	}
+	matrixC = ult;
+  }
+  
+
+  function actualizarMatriz()
+  {
+	
+	
+	var div = d3.select("body").append("div")   
+		.attr("class", "tooltip")               
+		.style("opacity", 0);
+		
+	var div = d3.select("body").append("div")   
+		.attr("class", "tooltip")               
+		.style("opacity", 0);	
+	
+	var todos = d3.select("#adjacencyG")
+      .selectAll("rect")
+      .data(matrixC);
+	  
+	var px = Math.max(1, 1000/contador);
+	
+	  todos
+	  .attr("width", px)
+      .attr("height", px)
+      .attr("x", function (d, i) {return d.y * px})
+      .attr("y", function (d, i) {return d.x * px})
+      .style("fill-opacity", function (d) {return d.peso * .3});
+	  
+      todos.enter()
+      .append("rect")
+      .attr("width", px)
+      .attr("height", px)
+      .attr("x", function (d, i) {return d.y * px})
+      .attr("y", function (d, i) {return d.x * px})
+      .style("stroke", "black")
+      .style("stroke-width", "0px")
+      .style("fill", "red")
+      .style("fill-opacity", function (d) {return d.peso * .3})
+		  .on("mouseover", function(d) {  
+				console.log("Entrando");
+				div.transition()        
+					.duration(100)      
+					.style("opacity", .9);      
+				div.html("Ganador:" + d.winner + "</br>Perdedor:" + d.loser + "</br>Marcador" + d.peso)  
+					.style("left", (d3.event.pageX) + "px")     
+					.style("top", (d3.event.pageY - 28) + "px");    
+				
+				gridOver(d);
+				})                  
+	.on("mouseout", function(d) 
+			{
+				div.transition()        
+					.duration(500)      
+					.style("opacity", 0); 
+				gridOver2(d);
+			});
+      //.on("mouseover", gridOver)
+      
+	  todos.exit()
+		.remove();
+	  
+	  function gridOver(d) {
+        d3.selectAll("rect").style("stroke-width", function (p) {return p.x == d.x || p.y == d.y ? "1px" : "0px"});
+       /* d3.selectAll("rect").attr("width", function (p) {return p.x == d.x || p.y == d.y ? 20 : 5})
+			  .attr("height", function (p) {return p.x == d.x || p.y == d.y ? 10 : 5})
+			  .attr("x", function (p) {return p.x <= d.x ? p.x*5 : p.x*5 + 5})
+			  .attr("y", function (p) {return p.y <= d.y ? p.y*5 : p.y*5 + 5});
+      */}
+	  function gridOver2(d) {
+        d3.selectAll("rect").style("stroke-width",  "0px");
+        /*d3.selectAll("rect").attr("width",  5)
+			  .attr("height",  5)
+			  .attr("x", function (p) {return  p.x*5 })
+			  .attr("y", function (p) {return  p.y*5 });
+      */}
+	  
+	  
+	  
+      var scaleSize = contador * px;
+	  
+      var nameScale1 = d3.scale.ordinal().domain(jugadoresF).rangePoints([0,scaleSize],1);
+      var nameScale2 = d3.scale.ordinal().domain(jugadoresC).rangePoints([0,scaleSize],1);
+      
+      xAxis = d3.svg.axis().scale(nameScale1).orient("left").tickSize(4);    
+      yAxis = d3.svg.axis().scale(nameScale2).orient("top").tickSize(4);   
+	  
+      d3.select("#ejeX").call(yAxis).selectAll("text").style("text-anchor", "end").style("font-size",8).attr("transform", "translate(-10,-10) rotate(90)").on("mouseover", function(d) {  
+			
+           d3.select(this).transition()        
+                .duration(100).style("font-size",25)      
+            })                         
+        .on("mouseout", function(d) 
+		{
+           d3.select(this).transition()        
+                .duration(100).style("font-size",8)      
+            })       ;
+      d3.select("#ejeY").call(xAxis).selectAll("text").style("font-size",8).on("mouseover", function(d) {  
+			
+            
+           d3.select(this).transition()        
+                .duration(100).style("font-size",25)      
+            })                  
+        .on("mouseout", function(d) 
+		{
+            
+           d3.select(this).transition()        
+                .duration(100).style("font-size",8)      
+            });
+  }
+  
+	
+ 
+  function adjacency() {
+	
+		console.log("Entrando1");
+    queue()
+    .defer(d3.csv, "nodelist.csv")
+    .defer(d3.csv, "complet2.csv")
+    .await(function(error, file1, file2) { createAdjacencyMatrix(file1, file2); });
+
+	
+    function createAdjacencyMatrix(nodes,edges) 
+	{
+		datosT= edges;
+		
+		var todos = d3.select("svg")
+		  .append("g")
+		  .attr("transform", "translate(100,100)")
+		  .attr("id", "adjacencyG");
+		
+		
+		
+		d3.select("#adjacencyG").append("g").attr("id","ejeX");
+		d3.select("#adjacencyG").append("g").attr("id","ejeY");
+		
+		 botonClick();
+    }
+    
+  }
+  
+  function botonClick()
+  {	
+		
+		calculo(d3.select("#torneo").node().anho,d3.select("#torneo").node().value,d3.select("#serie").node().value,d3.select("#tipo").node().value,d3.select("#superficie").node().value,d3.select("#ronda").node().value,datosT);
+		console.log("Calculado");
+		actualizarMatriz();
+  }
+  </script>
+  </footer>
+</body>
+</html>
